@@ -63,22 +63,22 @@ const authorize = (req, res, next) => {
 };
 
 // ==============================
-// ======== Photos Paths ========
+// ======= Playlists Paths ======
 // ==============================
 
-// Default photos path
+// Default playlists path
 router
-  // Retrieve list of currently uploaded photos for user
+  // Retrieve list of playlists for user
   .get("/", authorize, async (req, res) => {
-    res.send("Test Get Photos");
+    res.send("Test Get Playlists");
   })
-  // Upload photos to DB
+  // Create new playlist
   .post("/", authorize, async (req, res) => {
-    res.send("Test Upload of Photo");
+    res.send("Test Create New Playlist");
   })
-  // Delete photos from DB
+  // Delete playlist
   .delete("/", authorize, async (req, res) => {
-    res.send("Test Deletion of Photo");
+    res.send("Test Deletion of Playlist");
   });
 
 module.exports = router;

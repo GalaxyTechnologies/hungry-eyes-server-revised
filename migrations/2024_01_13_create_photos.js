@@ -4,13 +4,16 @@
  */
 exports.up = function (knex) {
   return knex.schema
-    .createTable("users", (table) => {
-      table.increments("user_id").primary();
-      table.string("username").notNullable();
-      table.string("password").notNullable();
-      table.string("first_name").notNullable();
-      table.string("last_name").notNullable();
-      table.string("email").notNullable();
+    .createTable("photos", (table) => {
+      table.string("photo_id").primary();
+      table.integer("user_id").unsigned().notNullable();
+      table
+        .foreign("user_id")
+        .references("user_id")
+        .inTable("users")
+        .onDelete("CASCADE");
+      table.string("name").notNullable();
+      table.string("url").notNullable();
       table.boolean("is_admin").defaultTo(false);
       table.timestamp("created_at").defaultTo(knex.fn.now());
       table.timestamp("updated_at").defaultTo(knex.fn.now());
@@ -25,8 +28,8 @@ exports.up = function (knex) {
             END;
             $$ language 'plpgsql';
       
-            CREATE TRIGGER update_users_updated_at BEFORE UPDATE
-            ON users FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+            CREATE TRIGGER update_photos_updated_at BEFORE UPDATE
+            ON photos FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
           `);
     });
 };
@@ -36,5 +39,5 @@ exports.up = function (knex) {
  * @returns { Promise<void> }
  */
 exports.down = function (knex) {
-  return knex.schema.dropTable("users");
+  return knex.schema.dropTable("photos");
 };

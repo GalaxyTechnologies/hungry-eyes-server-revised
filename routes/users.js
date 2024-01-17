@@ -55,14 +55,10 @@ const authorize = (req, res, next) => {
 // Register user path
 router.route("/register").post(async (req, res) => {
   const reqUserObj = {
-    username: req.headers["username"],
+    email: req.headers["email"],
     password: req.headers["password"],
     first_name: req.headers["first_name"],
     last_name: req.headers["last_name"],
-    email: req.headers["email"],
-    country_code: req.headers["country_code"],
-    phone: req.headers["phone"],
-    address: req.headers["address"],
     is_admin: false,
   };
 
@@ -105,6 +101,10 @@ router.route("/register").post(async (req, res) => {
 router.route("/login").post((req, res) => {
   const login = req.headers["login"];
   const password = req.headers["password"];
+
+  if (!login || !password) {
+    res.status(400).send("Missing login or password!");
+  }
 
   const hashedPassword = utils.hashData(password);
 
