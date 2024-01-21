@@ -55,18 +55,16 @@ const authorize = (req, res, next) => {
 // Register user path
 router.route("/register").post(async (req, res) => {
   const reqUserObj = {
-    email: req.headers["email"],
-    password: req.headers["password"],
-    first_name: req.headers["first_name"],
-    last_name: req.headers["last_name"],
+    email: req.body["email"],
+    password: req.body["password"],
+    first_name: req.body["first_name"],
+    last_name: req.body["last_name"],
     is_admin: false,
   };
 
   // Check if all required headers are present
-  if (!reqUserObj.username || !reqUserObj.password || !reqUserObj.email) {
-    return res
-      .status(400)
-      .send("Please enter username, password, and email in headers");
+  if (!reqUserObj.password || !reqUserObj.email) {
+    return res.status(400).send("Please enter password and email in headers");
   }
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -79,13 +77,13 @@ router.route("/register").post(async (req, res) => {
 
   try {
     const existingUser = await knex("users")
-      .where("username", reqUserObj.username)
+      .where("email", reqUserObj.email)
       .first();
 
     if (!existingUser) {
       // No existing user, insert new user
       await knex("users").insert(reqUserObj);
-      console.log(`User "${reqUserObj.username}" created`);
+      console.log(`User "${reqUserObj.first_name}" created`);
       res.status(201).json({ message: "User created successfully." });
     } else {
       // User already exists

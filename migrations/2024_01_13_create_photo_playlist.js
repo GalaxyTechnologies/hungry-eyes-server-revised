@@ -6,7 +6,7 @@ exports.up = function (knex) {
   return knex.schema
     .createTable("photo_playlist", (table) => {
       table.string("pp_id").primary();
-      table.integer("playlist_id").unsigned().notNullable();
+      table.string("playlist_id").unsigned().notNullable();
       table
         .foreign("playlist_id")
         .references("playlist_id")

@@ -14,7 +14,10 @@ app.use(cors());
 // Serve static assets from server
 app.use(express.static("public"));
 
-// Route using default route to valorant.js
+// Body parser middleware to handle JSON data
+app.use(express.json());
+
+// Routes
 app.use("/users", usersRoute);
 app.use("/photos", photosRoute);
 app.use("/playlists", playlistRoute);
